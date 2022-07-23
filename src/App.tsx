@@ -11,6 +11,7 @@ function App() {
         css={css`
           ${tw`bg-yellow-100`}
         `}></header>
+      <AppRouter />
     </div>
   )
 }
