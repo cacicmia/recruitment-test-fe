@@ -3,7 +3,7 @@ import { FC, ReactNode } from 'react'
 import { css, Interpolation, Theme } from '@emotion/react'
 import tw from 'twin.macro'
 const pageContentStyle = css`
-  ${tw`max-w-full px-4 sm:px-6 lg:px-8 py-8 w-full mx-auto`}
+  ${tw`max-w-full max-w-xl px-4 sm:px-6 lg:px-8 py-8 w-full mx-auto`}
 `
 interface ILayoutProps {
   customCss?: Interpolation<Theme>

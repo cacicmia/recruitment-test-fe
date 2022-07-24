@@ -1,13 +1,20 @@
 import { useEffect, useState } from 'react'
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, Method } from 'axios'
 interface IAxiosProps {
-  axiosInstance: AxiosInstance
-  method: Method | string
   url: string
   requestConfig?: AxiosRequestConfig
+  payload?: any
 }
-export const useAxios = (configObject: any) => {
-  const { axiosInstance, method, url, requestConfig = {} } = configObject
+
+const baseUrl = process.env.REACT_APP_BACKEND_URL! || 'http://localhost:4000/api/v1/survey'
+export const axiosInstance: AxiosInstance = axios.create({
+  baseURL: baseUrl,
+  headers: {
+    'Content-type': 'application/json'
+  }
+})
+export const useAxios = (configObject: IAxiosProps) => {
+  const { url, requestConfig = {} } = configObject
   const [data, setData] = useState<any>(null)
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<null | Error>(null)
@@ -16,11 +23,12 @@ export const useAxios = (configObject: any) => {
     const fetchData = async () => {
       try {
         setLoading(true)
-        const res: AxiosResponse = await axiosInstance[method.toLowerCase()](url, {
+        //@ts-ignore TODO
+        const res: AxiosResponse = await axiosInstance.get(url, {
           ...requestConfig,
           signal: controller.signal
         })
-        setData(res.data)
+        setData(res.data.data)
       } catch (err) {
         //@ts-ignore TODO
         setError(err)
