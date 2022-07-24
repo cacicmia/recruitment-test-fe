@@ -20,7 +20,7 @@ export const useAxios = (configObject: any) => {
           ...requestConfig,
           signal: controller.signal
         })
-        setData(res.data.data)
+        setData(res.data)
       } catch (err) {
         //@ts-ignore TODO
         setError(err)
