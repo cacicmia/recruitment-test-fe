@@ -1,18 +1,6 @@
 import { useEffect, useState } from 'react'
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, Method } from 'axios'
-interface IAxiosProps {
-  url: string
-  requestConfig?: AxiosRequestConfig
-  payload?: any
-}
-
-const baseUrl = process.env.REACT_APP_BACKEND_URL! || 'http://localhost:4000/api/v1/survey'
-export const axiosInstance: AxiosInstance = axios.create({
-  baseURL: baseUrl,
-  headers: {
-    'Content-type': 'application/json'
-  }
-})
+import { AxiosResponse } from 'axios'
+import { IAxiosProps, axiosInstance } from '../../shared/axios'
 export const useAxios = (configObject: IAxiosProps) => {
   const { url, requestConfig = {} } = configObject
   const [data, setData] = useState<any>(null)
@@ -23,12 +11,11 @@ export const useAxios = (configObject: IAxiosProps) => {
     const fetchData = async () => {
       try {
         setLoading(true)
-        //@ts-ignore TODO
         const res: AxiosResponse = await axiosInstance.get(url, {
           ...requestConfig,
           signal: controller.signal
         })
-        setData(res.data.data)
+        setData(res.data)
       } catch (err) {
         //@ts-ignore TODO
         setError(err)

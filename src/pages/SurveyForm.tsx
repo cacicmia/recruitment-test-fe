@@ -9,16 +9,23 @@ import { ErrorMessage } from '../shared/ErrorMessage'
 
 interface ISurveyFormProps {
   questions: Question[]
-  id: number
-  onSubmit: (data: any) => void
+  onSubmit?: (data: any) => void
+  disabled?: boolean
+  initialValue?: any
 }
 export const SurveyForm = (props: ISurveyFormProps) => {
-  const { questions, id } = props
+  const { questions, disabled = false, initialValue = [] } = props
   const [error, setError] = useState<string>('')
   const defaultValues = questions.reduce((obj, item) => ({ ...obj, [item.questionId]: '' }), {})
-  console.log(defaultValues)
+
+  const initialValues =
+    initialValue?.reduce(
+      (obj: any, item: any) => ({ ...obj, [item.questionId]: item.answer }),
+      {}
+    ) ?? {}
+
   const methods = useForm<any>({
-    defaultValues,
+    defaultValues: { ...defaultValues, ...initialValues },
     shouldUseNativeValidation: true,
     // TODO
     // resolver: yupResolver(schema),
@@ -39,6 +46,7 @@ export const SurveyForm = (props: ISurveyFormProps) => {
             answers
           }
         }
+        //@ts-ignore
         await props.onSubmit(data)
         console.log(data)
       } catch (e: any) {
@@ -49,13 +57,13 @@ export const SurveyForm = (props: ISurveyFormProps) => {
     []
   )
   return (
-    <div tw="my-4">
+    <div tw="m-4">
       <FormProvider {...methods}>
-        <form onSubmit={submitForm}>
+        <form onSubmit={props.onSubmit && submitForm}>
           {questions.map((question) => (
-            <InputField key={question.questionId} question={question} register={methods.register} />
+            <InputField key={question.questionId} question={question} disabled={disabled} />
           ))}
-          <Button type="submit" content="Submit form" />
+          {!disabled && <Button type="submit" content="Submit form" disabled={disabled} />}
           {error && <ErrorMessage message={error} />}
         </form>
       </FormProvider>

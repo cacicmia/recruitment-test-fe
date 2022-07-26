@@ -8,15 +8,20 @@ interface IButtonProps {
   onClick?: () => void
   customCss?: Interpolation<Theme>
   content: string
+  disabled?: boolean
 }
 const buttonStyle = css`
   ${tw` bg-green-900 text-white p-4 rounded-2xl`}
 `
 export const Button = (props: IButtonProps) => {
-  const { type, customCss, content, onClick } = props
+  const { type, customCss, content, onClick, disabled = false } = props
   // Todo handle optional onclick
   return (
-    <button type={type} css={[buttonStyle, customCss ? customCss : {}]} onClick={onClick}>
+    <button
+      type={type}
+      css={[buttonStyle, customCss ? customCss : {}]}
+      onClick={onClick}
+      disabled={disabled}>
       {content}
     </button>
   )
