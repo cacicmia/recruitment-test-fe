@@ -8,23 +8,24 @@ import { css } from '@emotion/react'
 import tw from 'twin.macro'
 import { useNavigate } from 'react-router-dom'
 import { axiosInstance } from '../shared/axios'
+import { ErrorContainer } from '../shared/ErrorContainer'
 
 export const titleStyle = css`
   ${tw`my-4 text-center font-semibold font-size[large]`}
 `
 export const SurveyPage = () => {
   let navigate = useNavigate()
-  const { data, error, loading } = useAxios({ url: '/' })
+  const { data, errors, loading } = useAxios({ url: '/' })
   if (loading) {
     return <Loader />
   }
-  if (error || !data) {
-    return <ErrorMessage message={error?.message || "Couldn't fetch form"} />
+  if (errors || !data) {
+    return <ErrorContainer errors={errors?.errors} />
   }
 
   const { questions, title, description, id } = data!
   const sendSurveyAnswers = async (data: any) => {
-    const response = await axiosInstance.post(`http://localhost:4000/api/v1/survey/${id}/answers`, {
+    const response = await axiosInstance.post(`/${id}/answers`, {
       data
     })
     // @ts-ignore
@@ -36,7 +37,7 @@ export const SurveyPage = () => {
       <div tw="flex flex-col">
         <h1 css={titleStyle}>{title}</h1>
         <div dangerouslySetInnerHTML={{ __html: description }}></div>
-        {data && <SurveyForm questions={questions} onSubmit={sendSurveyAnswers} />}
+        {data && <SurveyForm questions={questions} onSubmit={sendSurveyAnswers} errors={errors} />}
       </div>
     </Layout>
   )

@@ -15,12 +15,11 @@ const buttonStyle = css`
 `
 export const Button = (props: IButtonProps) => {
   const { type, customCss, content, onClick, disabled = false } = props
-  // Todo handle optional onclick
   return (
     <button
       type={type}
       css={[buttonStyle, customCss ? customCss : {}]}
-      onClick={onClick}
+      onClick={() => (onClick ? onClick() : null)}
       disabled={disabled}>
       {content}
     </button>

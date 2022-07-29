@@ -18,7 +18,7 @@ export const SuccessPage = () => {
   const { state } = useLocation()
   const { questions, answers } = state as LocationState
   if (!questions || !answers) {
-    return <ErrorMessage message="Something wrong happened" />
+    return <ErrorMessage title="Something wrong happened" />
   }
   return (
     <Layout>

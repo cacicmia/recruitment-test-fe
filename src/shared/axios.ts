@@ -1,4 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios'
+import { ChildProcess } from 'child_process'
 export interface IAxiosProps {
   url: string
   requestConfig?: AxiosRequestConfig
@@ -16,13 +17,15 @@ export const axiosInstance: AxiosInstance = axios.create({
 
 axiosInstance.interceptors.response.use(
   (response) => {
-    console.log('interceptor', response)
     return {
       ...response,
       ...deserialize(response.data)
     }
   },
   (error) => {
+    if (error.response?.data) {
+      return Promise.reject(error.response)
+    }
     return Promise.reject(error)
   }
 )

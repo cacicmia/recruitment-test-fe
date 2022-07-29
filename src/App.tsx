@@ -4,13 +4,16 @@ import tw from 'twin.macro'
 import { css } from '@emotion/react'
 import { AppRouter } from './AppRouter'
 import { AppHeader } from './shared/AppHeader'
+import { ErrorBoundary } from './shared/ErrorBoundary'
 function App() {
   return (
-    <div className="App">
-      <AppHeader />
+    <ErrorBoundary>
+      <div className="App">
+        <AppHeader />
 
-      <AppRouter />
-    </div>
+        <AppRouter />
+      </div>
+    </ErrorBoundary>
   )
 }
 

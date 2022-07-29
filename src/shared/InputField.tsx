@@ -3,10 +3,12 @@ import { css } from '@emotion/react'
 import { useController, useFormContext } from 'react-hook-form'
 import tw from 'twin.macro'
 import { Question } from '../types'
+import { ErrorMessage } from './ErrorMessage'
 
 interface IInputFieldProps {
   question: Question
   disabled?: boolean
+  error?: string
 }
 const questionInputType = {
   text: 'string',
@@ -16,12 +18,9 @@ const inputStyle = css`
   ${tw` border border-black rounded-md text-black w-full my-4`}
 `
 export const InputField = (props: IInputFieldProps) => {
-  const { question, disabled = false } = props
+  const { question, disabled = false, error } = props
   const { control } = useFormContext()
-  const {
-    field,
-    fieldState: { error }
-  } = useController({
+  const { field } = useController({
     name: question.questionId,
     control
   })
@@ -39,6 +38,7 @@ export const InputField = (props: IInputFieldProps) => {
         onChange={field.onChange}
         disabled={disabled}
       />
+      {error && <ErrorMessage title={error} />}
     </div>
   )
 }

@@ -6,16 +6,19 @@ import { InputField } from '../shared/InputField'
 import { Question } from '../types'
 import { Button } from '../shared/Button'
 import { ErrorMessage } from '../shared/ErrorMessage'
+import { ErrorContainer } from '../shared/ErrorContainer'
 
 interface ISurveyFormProps {
   questions: Question[]
   onSubmit?: (data: any) => void
   disabled?: boolean
   initialValue?: any
+  errors?: any[] | null
 }
 export const SurveyForm = (props: ISurveyFormProps) => {
-  const { questions, disabled = false, initialValue = [] } = props
-  const [error, setError] = useState<string>('')
+  const { questions, disabled = false, initialValue = [], errors } = props
+  const [error, setError] = useState<any | undefined>()
+  const [fieldErrors, setFieldErrors] = useState<any>()
   const defaultValues = questions.reduce((obj, item) => ({ ...obj, [item.questionId]: '' }), {})
 
   const initialValues =
@@ -26,14 +29,12 @@ export const SurveyForm = (props: ISurveyFormProps) => {
 
   const methods = useForm<any>({
     defaultValues: { ...defaultValues, ...initialValues },
-    shouldUseNativeValidation: true,
-    // TODO
-    // resolver: yupResolver(schema),
     mode: 'all'
   })
   const submitForm = useCallback(
     methods.handleSubmit(async (values) => {
-      setError('')
+      setError(null)
+      fieldErrors(null)
       const keys = Object.keys(values)
       const answers = keys.map((key) => ({
         questionId: key,
@@ -48,10 +49,18 @@ export const SurveyForm = (props: ISurveyFormProps) => {
         }
         //@ts-ignore
         await props.onSubmit(data)
-        console.log(data)
       } catch (e: any) {
-        console.log(e)
-        setError(e.message)
+        if (e.status === 422) {
+          const errors: any = {}
+          // this is sad, but works
+          e.data?.errors.forEach((err: any) => {
+            const key = err.source.pointer.substr(err.source.pointer.lastIndexOf('/') + 1)
+            errors[key] = err.detail
+          })
+          setFieldErrors(errors)
+        } else {
+          setError(e)
+        }
       }
     }),
     []
@@ -61,10 +70,15 @@ export const SurveyForm = (props: ISurveyFormProps) => {
       <FormProvider {...methods}>
         <form onSubmit={props.onSubmit && submitForm}>
           {questions.map((question) => (
-            <InputField key={question.questionId} question={question} disabled={disabled} />
+            <InputField
+              key={question.questionId}
+              question={question}
+              disabled={disabled}
+              error={fieldErrors && fieldErrors[question.questionId]}
+            />
           ))}
           {!disabled && <Button type="submit" content="Submit form" disabled={disabled} />}
-          {error && <ErrorMessage message={error} />}
+          {error && <ErrorContainer errors={error} />}
         </form>
       </FormProvider>
     </div>
