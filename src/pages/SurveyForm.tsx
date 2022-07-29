@@ -34,7 +34,7 @@ export const SurveyForm = (props: ISurveyFormProps) => {
   const submitForm = useCallback(
     methods.handleSubmit(async (values) => {
       setError(null)
-      fieldErrors(null)
+      setFieldErrors(null)
       const keys = Object.keys(values)
       const answers = keys.map((key) => ({
         questionId: key,

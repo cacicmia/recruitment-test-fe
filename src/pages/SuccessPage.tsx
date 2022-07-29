@@ -23,7 +23,7 @@ export const SuccessPage = () => {
   return (
     <Layout>
       <div tw="flex flex-col">
-        <h1 css={titleStyle}>Thank you for your feed back</h1>
+        <h1 css={titleStyle}>Thank you for your feedback</h1>
         <div css={answersBlockStyle}>
           <SurveyForm questions={questions} initialValue={answers} disabled />
         </div>
