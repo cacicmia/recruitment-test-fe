@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import tw from 'twin.macro'
 import { css, Interpolation, Theme } from '@emotion/react'
-import { ButtonHTMLAttributes } from 'react'
 
 interface IButtonProps {
   type: 'submit' | 'reset' | 'button' | undefined

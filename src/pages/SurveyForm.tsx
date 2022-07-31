@@ -5,7 +5,6 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { InputField } from '../shared/InputField'
 import { Question } from '../types'
 import { Button } from '../shared/Button'
-import { ErrorMessage } from '../shared/ErrorMessage'
 import { ErrorContainer } from '../shared/ErrorContainer'
 
 interface ISurveyFormProps {

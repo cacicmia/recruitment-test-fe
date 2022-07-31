@@ -3,5 +3,6 @@ export interface Question {
   questionType: 'text' | 'rating'
   label: string
   required: boolean
-  attributes: any
+  min: number
+  max: number
 }

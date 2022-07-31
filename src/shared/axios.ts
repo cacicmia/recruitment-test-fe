@@ -1,5 +1,4 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios'
-import { ChildProcess } from 'child_process'
 export interface IAxiosProps {
   url: string
   requestConfig?: AxiosRequestConfig

@@ -33,8 +33,8 @@ export const InputField = (props: IInputFieldProps) => {
         type={questionInputType[question.questionType]}
         value={field.value}
         required={question.required}
-        min={question.attributes?.min}
-        max={question.attributes?.max}
+        min={question.min}
+        max={question.max}
         onChange={field.onChange}
         disabled={disabled}
       />
